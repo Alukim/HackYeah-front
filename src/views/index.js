@@ -1,9 +1,10 @@
 import React from 'react';
+import { AsyncStorage, StatusBar, StyleSheet } from 'react-native';
+import { Container } from 'native-base';
 import { TabNavigator } from 'react-navigation';
-import { AsyncStorage } from 'react-native';
-import { Container, Header, Content, Left, Text } from 'native-base';
 
 import LoginView from './Login';
+
 import MapView from './Map';
 import ListView from './List';
 import NewAlertView from './NewAlert';
@@ -16,6 +17,17 @@ const AppRouter = TabNavigator({
   NewAlert: { screen: NewAlertView },
   Notifications: { screen: NotificationsView },
   Settings: { screen: SettingsView },
+}, {
+  tabBarOptions: {
+    style: {
+      marginTop: StatusBar.currentHeight,
+    },
+  },
+  animationEnabled: true,
+});
+
+const styles = StyleSheet.create({
+  marginTop: StatusBar.currentHeight,
 });
 
 export default class App extends React.Component {
@@ -23,29 +35,23 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      isAuthorized: false,
+      isAuthorized: true,
     };
 
-    AsyncStorage
-      .getItem('isAuthorized')
-      .then(isAuthorized => this.setState({ isAuthorized }));
+    // AsyncStorage
+    //   .getItem('isAuthorized')
+    //   .then(isAuthorized => this.setState({ isAuthorized }));
   }
 
   render() {
     return (
-      <Container>
-        <Header>
-          <Left>
-            <Text>Łuaksz pipka</Text>
-          </Left>
-        </Header>
-        <Content>
-          {
-            this.state.isAuthorized
-              ? <AppRouter />
-              : <LoginView />
-          }
-        </Content>
+      <Container style={styles.container}>
+        <StatusBar backgroundColor="blue" />
+        {
+          this.state.isAuthorized
+            ? <AppRouter />
+            : <LoginView />
+        }
       </Container>
     );
   }
