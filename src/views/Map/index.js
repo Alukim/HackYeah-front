@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 
 export default class MapView extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class MapView extends React.Component {
 
   render() {
     return (
-      <div>Map view</div>
+      <View><Text>Map view</Text></View>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 
 export default class NotificationsView extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class NotificationsView extends React.Component {
 
   render() {
     return (
-      <div>Notifications view</div>
+      <View><Text>Notifications view</Text></View>
     );
   }
 }

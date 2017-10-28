@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 
 export default class NewAlertView extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class NewAlertView extends React.Component {
 
   render() {
     return (
-      <div>New Alert</div>
+      <View><Text>New alert view</Text></View>
     );
   }
 }

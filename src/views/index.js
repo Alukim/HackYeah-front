@@ -1,5 +1,6 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
+import { AsyncStorage } from 'react-native';
 
 import LoginView from './Login';
 import MapView from './Map';
@@ -21,8 +22,12 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      isAuthorized: localStorage.getItem('isAuthorized'),
+      isAuthorized: false,
     };
+
+    AsyncStorage
+      .getItem('isAuthorized')
+      .then(isAuthorized => this.setState({ isAuthorized }));
   }
 
   render() {
