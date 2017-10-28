@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Icon } from 'native-base';
+import { Container, Icon, Text } from 'native-base';
+
 
 export default class MapView extends React.Component {
   static navigationOptions = {
@@ -15,7 +15,10 @@ export default class MapView extends React.Component {
 
   render() {
     return (
-      <View><Text>Map view</Text></View>
+      <Container>
+
+        <Text>Map view</Text>
+      </Container>
     );
   }
 }
