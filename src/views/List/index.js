@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { } from 'react-native';
+import { Container, Content, Text, Card, CardItem, Body } from 'native-base';
 
 export default class ListView extends React.Component {
   constructor(props) {
@@ -11,7 +12,50 @@ export default class ListView extends React.Component {
 
   render() {
     return (
-      <View><Text>List view</Text></View>
+      <Container>
+        <Content>
+          <Card>
+            <CardItem header>
+              <Text>
+                { 'Header!' }
+              </Text>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                  { 'Card content!' }
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem footer>
+              <Text>
+                { 'Footer!' }
+              </Text>
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem header>
+              <Text>
+                { 'Header!' }
+              </Text>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                  { 'Card content!' }
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem footer>
+              <Text>
+                { 'Footer!' }
+              </Text>
+            </CardItem>
+          </Card>
+        </Content>
+      </Container>
+
     );
   }
 }
