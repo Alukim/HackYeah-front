@@ -1,6 +1,7 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import { AsyncStorage } from 'react-native';
+import { Container, Header, Content, Left, Text } from 'native-base';
 
 import LoginView from './Login';
 import MapView from './Map';
@@ -9,7 +10,7 @@ import NewAlertView from './NewAlert';
 import NotificationsView from './Notifications';
 import SettingsView from './Settings';
 
-const Router = TabNavigator({
+const AppRouter = TabNavigator({
   Map: { screen: MapView },
   List: { screen: ListView },
   NewAlert: { screen: NewAlertView },
@@ -32,9 +33,20 @@ export default class App extends React.Component {
 
   render() {
     return (
-      this.state.isAuthorized
-        ? <Router />
-        : <LoginView />
+      <Container>
+        <Header>
+          <Left>
+            <Text>Łuaksz pipka</Text>
+          </Left>
+        </Header>
+        <Content>
+          {
+            this.state.isAuthorized
+              ? <AppRouter />
+              : <LoginView />
+          }
+        </Content>
+      </Container>
     );
   }
 }
