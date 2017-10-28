@@ -4,7 +4,7 @@ import { Icon } from 'native-base';
 
 export default class NewAlertView extends React.Component {
   static navigationOptions = {
-    tabBarLabel: 'Notifications',
+    tabBarLabel: 'New alert',
     tabBarIcon: ({ tintColor }) => (
       <Icon name="add" style={{ color: tintColor }} />
     ),
