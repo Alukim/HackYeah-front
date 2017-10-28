@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Text, View, Platform } from 'react-native';
 import { Container, Content, Card, CardItem, Body, Icon } from 'native-base';
+import FilterBar from './FilterBar';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -25,8 +26,10 @@ const cardsData = [
   },
 ];
 const categoryColors = new Map([
-  ['Homeless', 'orange'],
-  ['Other', 'gray'],
+  ['Homeless', '#e84c3d'],
+  ['Other', '#2196f3'],
+  ['Other 2', '#009c00'],
+  ['Other 3', ' #ff8200'],
 ]);
 
 export default class ListView extends React.Component {
@@ -80,12 +83,12 @@ export default class ListView extends React.Component {
       </Card>
     ));
     return (
-      <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#eeeeef' }}>
+      <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#efefef' }}>
         <Content style={{ padding: 15 }}>
+          <FilterBar />
           { cards }
         </Content>
       </Container>
-
     );
   }
 }
