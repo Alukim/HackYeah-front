@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Icon } from 'native-base';
 
 export default class SettingsView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-    };
-  }
+  static navigationOptions = {
+    tabBarLabel: 'Settings',
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="settings" style={{ color: tintColor }} />
+    ),
+  };
 
   render() {
     return (

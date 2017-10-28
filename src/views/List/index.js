@@ -1,14 +1,15 @@
 import React from 'react';
 import { } from 'react-native';
-import { Container, Content, Text, Card, CardItem, Body } from 'native-base';
+import { Container, Content, Text, Card, CardItem, Body, Icon } from 'native-base';
+
 
 export default class ListView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-    };
-  }
+  static navigationOptions = {
+    tabBarLabel: 'Alerts',
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="list" style={{ color: tintColor }} />
+    ),
+  };
 
   render() {
     return (
@@ -17,7 +18,7 @@ export default class ListView extends React.Component {
           <Card>
             <CardItem header>
               <Text>
-                { 'Header!' }
+                { 'Header!!!' }
               </Text>
             </CardItem>
             <CardItem>
