@@ -1,6 +1,5 @@
 import React from 'react';
 import { Platform, AsyncStorage, StatusBar } from 'react-native';
-import { Container } from 'native-base';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import LoginView from './Login';
@@ -23,7 +22,7 @@ if (iOS) {
     Settings: { screen: SettingsView },
   }, {
     initialRouteName: 'List',
-    animationEnabled: true,
+    animationEnabled: false,
     tabBarOptions: {
       showIcon: true,
       showLabel: iOS,
@@ -51,7 +50,7 @@ if (iOS) {
   }, {
     initialRouteName: 'Tabs',
     headerMode: 'hidden',
-    cardStyle: { marginTop: iOS ? 40 : StatusBar.currentHeight },
+    cardStyle: { marginTop: StatusBar.currentHeight },
   });
 }
 
