@@ -21,7 +21,7 @@ export default class MapPage extends React.Component {
     useLocation: true,
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({ useLocation: false });

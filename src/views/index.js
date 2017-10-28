@@ -39,8 +39,15 @@ if (iOS) {
     initialRouteName: 'List',
     animationEnabled: true,
     tabBarOptions: {
+      activeTintColor: '#2196f3',
+      inactiveTintColor: '#b0b0b0',
+      indicatorStyle: { backgroundColor: '#2196f3' },
       showIcon: true,
       showLabel: iOS,
+      style: {
+        backgroundColor: '#fff',
+
+      },
     },
   });
 
