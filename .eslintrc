@@ -1,0 +1,20 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": "airbnb",
+  "rules": {
+    "react/forbid-prop-types": ["off"],
+    "react/jsx-filename-extension": ["off"],
+    "import/extensions": ["off"],
+    "react/prop-types": ["off"],
+    "key-spacing": ["error", { "mode": "minimum" }],
+    "no-multi-spaces": ["error", {
+      "exceptions": {
+        "VariableDeclarator": true
+      }
+    }]
+  }
+}
