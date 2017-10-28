@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Icon } from 'native-base';
 
 export default class NewAlertView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-    };
-  }
+  static navigationOptions = {
+    tabBarLabel: 'New alert',
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="add" style={{ color: tintColor }} />
+    ),
+  };
 
   render() {
     return (

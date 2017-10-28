@@ -1,21 +1,47 @@
 import React from 'react';
+import { Platform, AsyncStorage, StatusBar, StyleSheet } from 'react-native';
+import { Container, Icon } from 'native-base';
 import { TabNavigator } from 'react-navigation';
-import { AsyncStorage } from 'react-native';
-import { Container, Header, Content, Left, Text } from 'native-base';
 
 import LoginView from './Login';
+
 import MapView from './Map';
 import ListView from './List';
 import NewAlertView from './NewAlert';
 import NotificationsView from './Notifications';
 import SettingsView from './Settings';
 
-const AppRouter = TabNavigator({
-  Map: { screen: MapView },
+const iOS = Platform.OS === 'ios';
+
+let views = {
   List: { screen: ListView },
-  NewAlert: { screen: NewAlertView },
+  Map: { screen: MapView },
   Notifications: { screen: NotificationsView },
   Settings: { screen: SettingsView },
+};
+
+if (iOS) {
+  views = {
+    List: views.List,
+    Map: views.Map,
+    NewAlert: { screen: NewAlertView },
+    Notifications: views.Notifications,
+    Settings: views.Settings,
+  };
+}
+
+const AppRouter = TabNavigator(views, {
+  initialRouteName: 'List',
+  animationEnabled: true,
+  tabBarOptions: {
+    showIcon: true,
+    showLabel: iOS,
+    style: { marginTop: StatusBar.currentHeight },
+  },
+});
+
+const styles = StyleSheet.create({
+  marginTop: StatusBar.currentHeight,
 });
 
 export default class App extends React.Component {
@@ -23,29 +49,23 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      isAuthorized: false,
+      isAuthorized: true,
     };
 
-    AsyncStorage
-      .getItem('isAuthorized')
-      .then(isAuthorized => this.setState({ isAuthorized }));
+    // AsyncStorage
+    //   .getItem('isAuthorized')
+    //   .then(isAuthorized => this.setState({ isAuthorized }));
   }
 
   render() {
     return (
-      <Container>
-        <Header>
-          <Left>
-            <Text>Łuaksz pipka</Text>
-          </Left>
-        </Header>
-        <Content>
-          {
-            this.state.isAuthorized
-              ? <AppRouter />
-              : <LoginView />
-          }
-        </Content>
+      <Container style={styles.container}>
+        <StatusBar backgroundColor="blue" />
+        {
+          this.state.isAuthorized
+            ? <AppRouter />
+            : <LoginView />
+        }
       </Container>
     );
   }
