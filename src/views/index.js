@@ -18,6 +18,7 @@ const AppRouter = TabNavigator({
   Notifications: { screen: NotificationsView },
   Settings: { screen: SettingsView },
 }, {
+  initialRouteName: 'NewAlert',
   tabBarOptions: {
     style: {
       marginTop: StatusBar.currentHeight,
