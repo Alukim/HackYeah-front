@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, View, Platform } from 'react-native';
-import { Container, Content, Card, CardItem, Body, Icon } from 'native-base';
+import { Container, Content, Card, CardItem, Body, Icon, Button } from 'native-base';
 import FilterBar from './FilterBar';
 
 const isIOS = Platform.OS === 'ios';
@@ -42,7 +42,7 @@ export default class ListView extends React.Component {
 
   render() {
     const cards = cardsData.map(cardData => (
-      <Card key={cardData.id} style={{ marginBottom: 30 }}>
+      <Card key={cardData.id} style={{ marginBottom: 15 }}>
         <CardItem
           cardBody
           style={[
@@ -78,6 +78,12 @@ export default class ListView extends React.Component {
             <Text>
               { cardData.description }
             </Text>
+            <Body>
+              <Button iconLeft full transparent>
+                <Icon name="md-checkmark-circle" style={{ color: '#3de881' }} />
+                <Text> {cardData.confirmCount} people confirmed this alert</Text>
+              </Button>
+            </Body>
           </View>
         </CardItem>
       </Card>
