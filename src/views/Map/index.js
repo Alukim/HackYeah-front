@@ -1,13 +1,17 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Icon } from 'native-base';
 
 export default class MapView extends React.Component {
-  constructor(props) {
-    super(props);
+  static navigationOptions = {
+    tabBarLabel: 'Map',
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="map" style={{ color: tintColor }} />
+    ),
+  };
 
-    this.state = {
-    };
-  }
+  state = {
+  };
 
   render() {
     return (

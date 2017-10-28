@@ -1,6 +1,6 @@
 import React from 'react';
-import { AsyncStorage, StatusBar, StyleSheet } from 'react-native';
-import { Container } from 'native-base';
+import { Platform, AsyncStorage, StatusBar, StyleSheet } from 'react-native';
+import { Container, Icon } from 'native-base';
 import { TabNavigator } from 'react-navigation';
 
 import LoginView from './Login';
@@ -11,20 +11,33 @@ import NewAlertView from './NewAlert';
 import NotificationsView from './Notifications';
 import SettingsView from './Settings';
 
-const AppRouter = TabNavigator({
-  Map: { screen: MapView },
+const iOS = Platform.OS === 'ios';
+
+let views = {
   List: { screen: ListView },
-  NewAlert: { screen: NewAlertView },
+  Map: { screen: MapView },
   Notifications: { screen: NotificationsView },
   Settings: { screen: SettingsView },
-}, {
-  initialRouteName: 'NewAlert',
-  tabBarOptions: {
-    style: {
-      marginTop: StatusBar.currentHeight,
-    },
-  },
+};
+
+if (iOS) {
+  views = {
+    List: views.List,
+    Map: views.Map,
+    NewAlert: { screen: NewAlertView },
+    Notifications: views.Notifications,
+    Settings: views.Settings,
+  };
+}
+
+const AppRouter = TabNavigator(views, {
+  initialRouteName: 'List',
   animationEnabled: true,
+  tabBarOptions: {
+    showIcon: true,
+    showLabel: iOS,
+    style: { marginTop: StatusBar.currentHeight },
+  },
 });
 
 const styles = StyleSheet.create({

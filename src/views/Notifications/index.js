@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Icon } from 'native-base';
 
 export default class NotificationsView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-    };
-  }
+  static navigationOptions = {
+    tabBarLabel: 'Notifications',
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="notifications" style={{ color: tintColor }} />
+    ),
+  };
 
   render() {
     return (
