@@ -24,6 +24,10 @@ const cardsData = [
     confirmCount: 0,
   },
 ];
+const categoryColors = new Map([
+  ['Homeless', 'orange'],
+  ['Other', 'gray'],
+]);
 
 export default class ListView extends React.Component {
   static navigationOptions = {
@@ -36,7 +40,18 @@ export default class ListView extends React.Component {
   render() {
     const cards = cardsData.map(cardData => (
       <Card key={cardData.id} style={{ marginBottom: 30 }}>
-        <CardItem header>
+        <CardItem
+          cardBody
+          style={[
+            {
+              borderRadius: 0, height: 4, padding: 0, margin: 0, overflow: 'hidden',
+            },
+            {
+              backgroundColor: categoryColors.get(cardData.category),
+            },
+          ]}
+        />
+        <CardItem>
           <Body>
             <Text>
               { cardData.userName }
@@ -65,7 +80,7 @@ export default class ListView extends React.Component {
       </Card>
     ));
     return (
-      <Container style={{ paddingTop: isIOS ? 50 : 0 }}>
+      <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#eeeeef' }}>
         <Content style={{ padding: 15 }}>
           { cards }
         </Content>
