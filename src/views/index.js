@@ -1,9 +1,17 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 
-import LoginPage from './Login';
+import LoginView from './Login';
+import MapView from './Map';
+import ListView from './List';
+import NewAlertView from './NewAlert';
+import SettingsView from './Settings';
 
 const Router = TabNavigator({
+  Map: { screen: MapView },
+  List: { screen: ListView },
+  NewAlert: { screen: NewAlertView },
+  Settings: { screen: SettingsView },
 });
 
 export default class App extends React.Component {
@@ -19,7 +27,7 @@ export default class App extends React.Component {
     return (
       this.state.isAuthorized
         ? <Router />
-        : <LoginPage />
+        : <LoginView />
     );
   }
 }
