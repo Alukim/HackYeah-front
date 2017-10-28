@@ -47,7 +47,6 @@ if (iOS) {
       showLabel: iOS,
       style: {
         backgroundColor: '#fff',
-
       },
     },
   });

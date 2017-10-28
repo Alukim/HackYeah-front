@@ -1,6 +1,6 @@
 export default {
   apiURL: 'http://google.pl',
-  alarmColors: {
+  alertColors: {
     pollution: '#009c00',
     homelessness: '#6f4900',
     violence: '#ee80ff',
