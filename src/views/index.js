@@ -5,12 +5,14 @@ import LoginView from './Login';
 import MapView from './Map';
 import ListView from './List';
 import NewAlertView from './NewAlert';
+import NotificationsView from './Notifications';
 import SettingsView from './Settings';
 
 const Router = TabNavigator({
   Map: { screen: MapView },
   List: { screen: ListView },
   NewAlert: { screen: NewAlertView },
+  Notifications: { screen: NotificationsView },
   Settings: { screen: SettingsView },
 });
 

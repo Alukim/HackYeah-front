@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class MapView extends React.Component {
+export default class NotificationsView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -10,7 +10,7 @@ export default class MapView extends React.Component {
 
   render() {
     return (
-      <div>Map view</div>
+      <div>Notifications view</div>
     );
   }
 }
