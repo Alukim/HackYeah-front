@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, AsyncStorage, StatusBar } from 'react-native';
+import { Container } from 'native-base';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import LoginView from './Login';
@@ -66,9 +67,14 @@ export default class App extends React.Component {
 
   render() {
     return (
-      this.state.isAuthorized
-        ? <AppRouter />
-        : <LoginView />
+      <Container>
+        <StatusBar backgroundColor="#fff" />
+        {
+          this.state.isAuthorized
+          ? <AppRouter />
+          : <LoginView />
+        }
+      </Container>
     );
   }
 }

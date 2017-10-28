@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from 'native-base';
 import { MapView, Location, Permissions } from 'expo';
 
+import config from '../../../config';
 
 export default class MapPage extends React.Component {
   static navigationOptions = {
@@ -11,6 +12,11 @@ export default class MapPage extends React.Component {
     ),
   };
 
+  constructor(props) {
+    super(props);
+    this.getAlerts = this.getAlerts.bind(this);
+  }
+
   state = {
     coords: {
       latitude: 50.0676592,
@@ -19,6 +25,7 @@ export default class MapPage extends React.Component {
       longitudeDelta: 0.0421,
     },
     useLocation: true,
+    alerts: [],
   };
 
   async componentDidMount() {
@@ -36,6 +43,26 @@ export default class MapPage extends React.Component {
         },
       });
     }
+
+    this.getAlerts();
+  }
+
+  getAlerts() {
+    this.setState({
+      alerts: [{
+        latitude: 50.0676592,
+        longitude:  19.988532,
+        category: 'pollution',
+      }, {
+        latitude: 50.073956,
+        longitude: 19.982212,
+        category: 'violence',
+      }, {
+        latitude: 50.062254,
+        longitude:  20.005492,
+        category: 'danger',
+      }],
+    });
   }
 
   render() {
@@ -57,15 +84,16 @@ export default class MapPage extends React.Component {
           longitudeDelta: 0.0421,
         }}
       >
-        <MapView.Marker
-          coordinate={{
-            latitude: 50.0676592,
-            longitude:  19.988532,
-          }}
-          title="title"
-          description="description"
-          pinColor="#009c00"
-        />
+        {this.state.alerts.map((alert, i) => (
+          <MapView.Marker
+            key={`alert-${i}`}
+            coordinate={{
+              latitude: alert.latitude,
+              longitude: alert.longitude,
+            }}
+            pinColor={config.alarmColors[alert.category.toLowerCase()]}
+          />
+        ))}
       </MapView>
     );
   }
