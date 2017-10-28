@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Icon } from 'native-base';
+import { Platform } from 'react-native';
+import { Container, Icon, Fab, Text } from 'native-base';
+
+const iOS = Platform.OS === 'ios';
 
 export default class MapView extends React.Component {
   static navigationOptions = {
@@ -14,8 +16,20 @@ export default class MapView extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
-      <View><Text>Map view</Text></View>
+      <Container>
+        {!iOS && (
+          <Fab
+            position="bottomRight"
+            onPress={() => navigation.navigate('NewAlert')}
+          >
+            <Icon name="add" />
+          </Fab>
+        )}
+        <Text>Map view</Text>
+      </Container>
     );
   }
 }
