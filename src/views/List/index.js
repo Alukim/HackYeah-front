@@ -17,13 +17,13 @@ export default class ListView extends React.Component {
     ),
   };
   state = {
-    alertsList: []
+    alertsList: [],
   };
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status === 'granted') {
       /*
-      await Location.getCurrentPositionAsync({}).then(coords => {
+      Location.getCurrentPositionAsync({}).then(coords => {
 
       });
       */
