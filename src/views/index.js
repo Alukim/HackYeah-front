@@ -64,8 +64,8 @@ if (iOS) {
 export default class App extends React.Component {
   state = { isAuthorized: false }
   async componentDidMount() {
-    const isAuthorized = await AsyncStorage.getItem('isAuthorized');
-    this.setState({ isAuthorized });
+    //const isAuthorized = await AsyncStorage.getItem('isAuthorized');
+    //this.setState({ isAuthorized: false });
   }
   render() {
     return (

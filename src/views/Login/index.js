@@ -20,10 +20,7 @@ export default class LoginView extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
-        <StatusBar backgroundColor="transparent" barStyle="light-content" />
-        <LoginRouter />
-      </KeyboardAvoidingView>
+      <LoginRouter />
     );
   }
 }
