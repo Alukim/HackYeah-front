@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Text, View, Platform } from 'react-native';
-import { Container, Content, Card, CardItem, Body, Icon, Button } from 'native-base';
+import { Container, Content, Card, CardItem, Body, Icon, Button, Right } from 'native-base';
+import moment from 'moment';
 import FilterBar from './FilterBar';
 
 const isIOS = Platform.OS === 'ios';
@@ -14,6 +15,7 @@ const cardsData = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies dictum ipsum in pretium. Duis a sodales nibh, et egestas libero. Nullam aliquet augue sed neque fringilla tempus.',
     imageURL: null,
     confirmCount: 7,
+    date: '2017-10-27T19:34:00Z',
   },
   {
     id: '98174289',
@@ -23,6 +25,7 @@ const cardsData = [
     description: 'Curabitur gravida erat eleifend ullamcorper blandit.',
     imageURL: null,
     confirmCount: 0,
+    date: '2017-10-26T19:34:00Z',
   },
 ];
 const categoryColors = new Map([
@@ -45,24 +48,26 @@ export default class ListView extends React.Component {
       <Card key={cardData.id} style={{ marginBottom: 15 }}>
         <CardItem
           cardBody
-          style={[
-            {
-              borderRadius: 0, height: 4, padding: 0, margin: 0, overflow: 'hidden',
-            },
-            {
+          style={{
+              borderRadius: 0,
+              height: 4,
               backgroundColor: categoryColors.get(cardData.category),
-            },
-          ]}
+            }}
         />
         <CardItem>
-          <Body>
-            <Text>
-              { cardData.userName }
-            </Text>
-            <Text style={{ fontSize: 12 }}>
-              { cardData.localization }
-            </Text>
-          </Body>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Body>
+              <Text>
+                { cardData.userName }
+              </Text>
+              <Text style={{ fontSize: 12 }}>
+                { cardData.localization }
+              </Text>
+            </Body>
+            <Right>
+              <Text note style={{ textAlign: 'right' }}>{ moment(cardData.date).fromNow() }</Text>
+            </Right>
+          </View>
         </CardItem>
         <CardItem cardBody>
           <Image
