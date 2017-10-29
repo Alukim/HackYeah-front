@@ -83,7 +83,7 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardAvoidingView style={{ flex: 1 }}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
         <Image style={styles.img} source={require('../../img/loginScreen.jpg')}>
           <Image style={styles.logo} resizeMode="contain" source={require('../../img/logo.png')} />
@@ -100,7 +100,7 @@ export default class Login extends React.Component {
                   <Label style={styles.label}>Password</Label>
                   <Input secureTextEntry style={{ color: '#fff' }} onChangeText={this.changePassword.bind(this)} value={this.state.password} />
                 </Item>
-                <Button style={{ height: 40, marginBottom: 5 }} block backgroundColor="#2196f3" onPress={this.handleOnSubmit}>
+                <Button style={{ height: 40, marginBottom: 8 }} block backgroundColor="#2196f3" onPress={this.handleOnSubmit}>
                   <Text>Sign In</Text>
                 </Button>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
