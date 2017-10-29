@@ -32,11 +32,9 @@ export default class ListView extends React.Component {
     console.log('load data, type='+type);
     const options = type === 0 ? ('?UserId='+this.state.userId) : '';
     //this.setState({ alertsList: [] });
-    console.log('options: ' + options);
     const response = await axios.get(`${config.apiURL}/alerts` + options);
 
     if (response.status === 200) {
-      console.log(response.data.length);
       this.setState({ alertsList: response.data });
     } else {
       console.log('error');
@@ -52,8 +50,7 @@ export default class ListView extends React.Component {
           }
           return Object.assign({}, alert, { confirmed: true, confirmedBy: [...alert.confirmedBy, this.state.userId] });
         });
-        console.log('send ' + id);
-        axios.patch(`${config.apiURL}/alerts/${id}/confirm`).then(response => {
+        axios.patch(`${config.apiURL}/alerts/${id}/confirm`, { 'UserId': this.state.userId }).then(response => {
           console.log('response')
         });
         this.setState({ alertsList: newList });
