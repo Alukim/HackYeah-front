@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { Container, Content, Icon } from 'native-base';
+import { Location, Permissions } from 'expo';
+import { Icon, Container, Content } from 'native-base';
 import FilterBar from './FilterBar';
 import AlertCard from './AlertCard';
 
@@ -36,8 +37,13 @@ export default class ListView extends React.Component {
       <Icon name="list" style={{ color: tintColor }} />
     ),
   };
-  componentDidMount() {
+  state = {};
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status === 'granted') {
+      const { coords } = await Location.getCurrentPositionAsync({});
 
+    }
   }
   render() {
     const showMessage = () => {
