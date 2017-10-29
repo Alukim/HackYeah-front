@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Text } from 'react-native';
-import { Card, CardItem, Icon, Button } from 'native-base';
+import { Card, CardItem, Button } from 'native-base';
 
 export default function FilterBar() {
   return (
