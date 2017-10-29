@@ -5,7 +5,7 @@ import {
   Card, Form, CardItem, Item, Picker, Input,
   Label, Toast,
 } from 'native-base';
-import { Platform, View, AsyncStorage, TouchableOpacity } from 'react-native';
+import { Platform, View, AsyncStorage, TouchableOpacity, Image } from 'react-native';
 import { Permissions, MapView, Camera, Location } from 'expo';
 
 import config from '../../../config';
@@ -49,7 +49,7 @@ export default class NewAlertView extends React.Component {
   };
 
   async componentDidMount() {
-    await AsyncStorage.setItem('userId', 'bed0d09a-bb98-495b-887f-0cbb767637a4');
+    await AsyncStorage.setItem('userId', 'bed0d09a-bb98-495b-887f-0cbb767637a4');0
     let permissions = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ useCamera: permissions.status === 'granted' });
 
@@ -96,41 +96,34 @@ export default class NewAlertView extends React.Component {
 
       if(this.state.image)
       {
-        // ImagePicker saves the taken photo to disk and returns a local URI to it
         let localUri = this.state.image.uri;
         console.log(localUri);
         let filename = localUri.split('/').pop();
 
         console.log(locaUri + ' ' + filename);
-        // Upload the image using the fetch and FormData APIs
-        let formData = new FormData();
-        // Assume "photo" is the name of the form field the server expects
-        formData.append('file', { uri: localUri, name: filename, type: 'image/jpeg' });
+        const formData = new FormData();
+
+        formData.append('file', { 
+          uri: localUri, 
+          name: filename, 
+          type: 'image/jpeg',
+        });
         console.log(formData);
 
-        const config = {
+        response = await axios({
           method: 'POST',
-          headers: {
+          baseURL: `${config.apiURL}/files`,
+          body: formData,
+          headers: { 
             'Accept': 'application/json',
             'Content-Type': 'multipart/form-data',
-            'Content-Language': React.NativeModules.RNI18n.locale,
+            'Content-Language': React.NativeModules.RNI18n.locale, 
           },
-          body: formData,
-        }
-
-        response = await fetch(`${config.apiURL}/files`, config);
-
+        });
+        
         console.log(response);
-
         attachmentId = response.data;
       }
-      // if (this.state.image) {
-      //   response = await axios.post(`${config.apiURL}/files`, {
-      //     file: this.state.image,
-      //   });
-
-      //   attachmentId = response.data;
-      // }
 
       response = await axios.post(`${config.apiURL}/alerts`, {
         userId,
@@ -194,44 +187,49 @@ export default class NewAlertView extends React.Component {
           <Card style={{ marginBottom: 15 }}>
             <CardItem>
               <Form style={{ overflow: 'hidden', marginHorizontal: -20, width: '100%', flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
-                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', width: '100%' }}>
-                  <Button
-                    transparent
-                    iconLeft
-                    dark
-                    onPress={() => this.setState({ showCamera: true })}
-                    style={{
-                      height: 120,
-                      width: 120,
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      paddingVertical: 10,
-                    }}
-                  >
-                    <Icon style={{ color: '#494949', marginTop: 5, fontSize: 50 }} name="camera" />
-                    <Text style={{ color: '#494949', marginLeft: 10, fontSize: 11, width: '100%', textAlign: 'center' }}>
-                      Take a photo/video
-                    </Text>
-                  </Button>
-                  <Button
-                    transparent
-                    iconLeft
-                    dark
-                    onPress={() => this.setState({ showCameraRoll: true })}
-                    style={{
-                      height: 120,
-                      width: 120,
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      paddingVertical: 10,
-                    }}
-                  >
-                    <Icon style={{ color: '#494949', marginTop: 5, fontSize: 50 }} name="images" />
-                    <Text style={{ color: '#494949', marginLeft: 10, fontSize: 11, width: '100%', textAlign: 'center' }}>
-                      Add from library
-                    </Text>
-                  </Button>
-                </View>
+                {!this.state.image
+                  ? (
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', width: '100%' }}>
+                      <Button
+                        transparent
+                        iconLeft
+                        dark
+                        onPress={() => this.setState({ showCamera: true })}
+                        style={{
+                          height: 120,
+                          width: 120,
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          paddingVertical: 10,
+                        }}
+                      >
+                        <Icon style={{ color: '#494949', marginTop: 5, fontSize: 50 }} name="camera" />
+                        <Text style={{ color: '#494949', marginLeft: 10, fontSize: 11, width: '100%', textAlign: 'center' }}>
+                          Take a photo/video
+                        </Text>
+                      </Button>
+                      <Button
+                        transparent
+                        iconLeft
+                        dark
+                        onPress={() => this.setState({ showCameraRoll: true })}
+                        style={{
+                          height: 120,
+                          width: 120,
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          paddingVertical: 10,
+                        }}
+                      >
+                        <Icon style={{ color: '#494949', marginTop: 5, fontSize: 50 }} name="images" />
+                        <Text style={{ color: '#494949', marginLeft: 10, fontSize: 11, width: '100%', textAlign: 'center' }}>
+                          Add from library
+                        </Text>
+                      </Button>
+                    </View>
+                  )
+                  : <Image source={{ uri: this.state.image.uri }} style={{ width: '100%', height: 200 }} resizeMode="cover" />
+                }
                 <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingHorizontal: 25 }}>
                   <Picker
                     mode="dropdown"
