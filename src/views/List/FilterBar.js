@@ -7,7 +7,7 @@ export default class FilterBar extends React.Component {
     super();
     this.state = {
       onChange: props.onChange || (() => null),
-      selectedItem: 0,
+      selectedItem: 1,
       buttonsTexts: ['Yours', 'All'],
     };
   }
@@ -16,8 +16,8 @@ export default class FilterBar extends React.Component {
       return () => {
         if (index !== this.state.selectedItem) {
           this.setState({ selectedItem: index });
-          this.state.onChange(index);
         }
+        this.state.onChange(index);
       };
     };
     const items = this.state.buttonsTexts.map((item, index) => (
