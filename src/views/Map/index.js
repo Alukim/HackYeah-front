@@ -1,9 +1,12 @@
 import React from 'react';
-import { Icon } from 'native-base';
+import { Platform } from 'react-native';
+import { Icon, Fab, Container } from 'native-base';
 import { MapView, Location, Permissions } from 'expo';
 
 import config from '../../../config';
 import MarkerContent from './MarkerContent';
+
+const iOS = Platform.OS === 'ios';
 
 export default class MapPage extends React.Component {
   static navigationOptions = {
@@ -85,41 +88,53 @@ export default class MapPage extends React.Component {
 
   render() {
     const { currentAlert, alerts, useLocation, region } = this.state;
+    const { navigation } = this.props;
     return (
-      <MapView
-        loadingBackgroundColor="#efefef"
-        style={{ flex: 1 }}
-        loadingEnabled
-        showsPointsOfInterest
-        showsMyLocationButton
-        showsUserLocation
-        showsScale
-        showsBuildings
-        initialRegion={useLocation ? region : {
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-        {alerts.map(alert => (
-          <MapView.Marker
-            key={`alert-${alert.id}`}
-            coordinate={{
-              latitude: alert.latitude,
-              longitude: alert.longitude,
-            }}
-            pinColor={config.alertColors[alert.category.toLowerCase()]}
-            onPress={() => this.getCurrentAlert(alert.id)}
+      <Container>
+        {!iOS && (
+          <Fab
+            position="bottomRight"
+            onPress={() => navigation.navigate('NewAlert')}
+            style={{ backgroundColor: '#2196f3', zIndex: 9999999 }}
           >
-            {currentAlert && (
-              <MapView.Callout>
-                <MarkerContent cardData={currentAlert} />
-              </MapView.Callout>
-            )}
-          </MapView.Marker>
-        ))}
-      </MapView>
+            <Icon name="add" />
+          </Fab>
+        )}
+        <MapView
+          loadingBackgroundColor="#efefef"
+          style={{ flex: 1 }}
+          loadingEnabled
+          showsPointsOfInterest
+          showsMyLocationButton
+          showsUserLocation
+          showsScale
+          showsBuildings
+          initialRegion={useLocation ? region : {
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0006754,
+            longitudeDelta: 0.0011192,
+          }}
+        >
+          {alerts.map(alert => (
+            <MapView.Marker
+              key={`alert-${alert.id}`}
+              coordinate={{
+                latitude: alert.latitude,
+                longitude: alert.longitude,
+              }}
+              pinColor={config.alertColors[alert.category.toLowerCase()]}
+              onPress={() => this.getCurrentAlert(alert.id)}
+            >
+              {currentAlert && (
+                <MapView.Callout>
+                  <MarkerContent cardData={currentAlert} />
+                </MapView.Callout>
+              )}
+            </MapView.Marker>
+          ))}
+        </MapView>
+      </Container>
     );
   }
 }

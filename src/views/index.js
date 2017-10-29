@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, AsyncStorage, StatusBar } from 'react-native';
 import { Container } from 'native-base';
 import { TabNavigator, StackNavigator } from 'react-navigation';
+import Expo from 'expo';
 
 import LoginView from './Login';
 import MapView from './Map';
@@ -63,6 +64,13 @@ if (iOS) {
 
 export default class App extends React.Component {
   state = { isAuthorized: true }
+
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      'Roboto': require('native-base/Fonts/Roboto.ttf'),
+      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+    });
+  }
 
   render() {
     return (
