@@ -95,7 +95,6 @@ export default class ListView extends React.Component {
           { cards }
         </Content>
       </Container>
-
     );
   }
 }

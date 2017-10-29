@@ -6,7 +6,7 @@ export default {
     violence: '#ee80ff',
     danger: '#e84c3d',
     addictions: '#2196f3',
-    hunger: '#ff820',
+    hunger: '#ff8200',
     others: '#989898',
   },
 };

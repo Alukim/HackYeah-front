@@ -6,7 +6,7 @@ import {
   Label,
 } from 'native-base';
 import { Platform, View } from 'react-native';
-import { Permissions } from 'expo';
+import { Permissions, MapView } from 'expo';
 
 import config from '../../../config';
 
@@ -24,14 +24,17 @@ export default class NewAlertView extends React.Component {
     super(props);
     this.selectCategory = this.selectCategory.bind(this);
     this.changeDescription = this.changeDescription.bind(this);
+    this.changeLocation = this.changeLocation.bind(this);
   }
 
   state = {
+    useLocation: true,
     useCamera: true,
     showCamera: false,
     categories: [],
     selectedCategory: '',
     location: '',
+    description: '',
     region: {
       latitude: 50.0676592,
       longitude:  19.988532,
@@ -41,7 +44,7 @@ export default class NewAlertView extends React.Component {
   };
 
   async componentDidMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    let status = await Permissions.askAsync(Permissions.CAMERA).status;
     this.setState({ useCamera: status === 'granted' });
 
     const response = await axios.get(`${config.apiURL}/alerts/categories`);
@@ -49,7 +52,7 @@ export default class NewAlertView extends React.Component {
       this.setState({ categories: response.data });
     }
 
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    status = await Permissions.askAsync(Permissions.LOCATION).status;
     if (status !== 'granted') {
       this.setState({ useLocation: false });
     } else {
@@ -70,7 +73,7 @@ export default class NewAlertView extends React.Component {
   }
 
   changeDescription(value) {
-    this.setState({ descripiton: value });
+    this.setState({ description: value });
   }
 
   changeLocation(value) {
@@ -78,15 +81,14 @@ export default class NewAlertView extends React.Component {
   }
 
   render() {
-    const { useCamera, showCamera, categories, selectedCategory, descripiton, region, location } = this.state;
-
+    const { useLocation, useCamera, showCamera, categories, selectedCategory, description, region, location } = this.state;
     return (
       <Container style={{ paddingTop: iOS ? 15 : 0, backgroundColor: '#eeeeef' }}>
         <Content style={{ padding: 15 }}>
           <Card>
             <CardItem>
-              <Form style={{ marginLeft: -25, flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
+              <Form style={{ overflow: 'hidden', marginHorizontal: -20, flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', width: '100%' }}>
                   <Button
                     transparent
                     iconLeft
@@ -135,14 +137,15 @@ export default class NewAlertView extends React.Component {
                       borderBottomLeftRadius: 0,
                       borderBottomRightRadius: 0,
                       borderBottomColor: selectedCategory ? config.alertColors[selectedCategory.toLowerCase()] : '#eee',
+                      width: '100%',
                     }}
                   >
-                    {categories.map((category, i) => (
+                    {categories && categories.map((category, i) => (
                       <Item
                         floatingLabel
                         key={`category-${i}`}
                         label={category}
-                        value={descripiton}
+                        value={category}
                         onValueChange={this.selectCategory}
                       />
                     ))}
@@ -152,8 +155,9 @@ export default class NewAlertView extends React.Component {
                       numberOfLines={4}
                       maxLength={250}
                       multiline
-                      value={descripiton}
-                      onValueChange={this.changeDescription}
+                      value={description}
+                      placeholder="Description"
+                      onChangeText={this.changeDescription}
                     />
                     : <Item floatingLabel>
                       <Label>Description</Label>
@@ -161,25 +165,35 @@ export default class NewAlertView extends React.Component {
                         numberOfLines={4}
                         maxLength={250}
                         multiline
-                        value={descripiton}
-                        onValueChange={this.changeDescription}
+                        value={description}
+                        onChangeText={this.changeDescription}
                       />
                     </Item>
                   }
                   {iOS
-                    ? <Input value={descripiton} onValueChange={this.changeDescription} />
+                    ? <Input placeholder="Location" value={location} onChangeText={this.changeLocation} />
                     : <Item floatingLabel>
-                      <Label>Description</Label>
-                      <Input
-                        numberOfLines={4}
-                        maxLength={250}
-                        multiline
-                        value={descripiton}
-                        onValueChange={this.changeDescription}
-                      />
+                      <Label>Location</Label>
+                      <Input value={location} onChangeText={this.changeLocation} />
                     </Item>
                   }
                 </View>
+                <MapView
+                  loadingBackgroundColor="#efefef"
+                  style={{ marginTop: 15, marginBottom: -15, flex: 1, height: 200, width: '100%' }}
+                  loadingEnabled
+                  showsPointsOfInterest
+                  showsMyLocationButton
+                  showsUserLocation
+                  showsScale
+                  showsBuildings
+                  initialRegion={useLocation ? region : {
+                    latitude: 37.78825,
+                    longitude: -122.4324,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  }}
+                />
               </Form>
             </CardItem>
           </Card>
