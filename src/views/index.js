@@ -21,8 +21,9 @@ if (iOS) {
     NewAlert: { screen: NewAlertView },
     Notifications: { screen: NotificationsView },
     Settings: { screen: SettingsView },
+    Login: {screen: LoginView }
   }, {
-    initialRouteName: 'List',
+    initialRouteName: 'Login',
     animationEnabled: false,
     tabBarOptions: {
       showIcon: true,
@@ -36,8 +37,9 @@ if (iOS) {
     Map: { screen: MapView },
     Notifications: { screen: NotificationsView },
     Settings: { screen: SettingsView },
+    Login: { screen: LoginView }
   }, {
-    initialRouteName: 'List',
+    initialRouteName: 'Login',
     animationEnabled: true,
     tabBarOptions: {
       activeTintColor: '#2196f3',
