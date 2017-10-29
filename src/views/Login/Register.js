@@ -145,7 +145,7 @@ export default class Login extends React.Component {
                   <Input placeholder="RePassword" secureTextEntry style={{ color: '#fff' }} onChangeText={this.changeRePassword.bind(this)} value={this.state.rePassword} />
                 </Item>
                 <Button style={{ height: 40, marginBottom: 8 }} block backgroundColor="#2196f3" onPress={this.handleSubmit}>
-                  <Text>Sign In</Text>
+                  <Text>Sign Up</Text>
                 </Button>                
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', marginTop: 10 }}>
                   <Text style={{ color: '#fff', flex: 1, width: '100%', textAlign: 'center' }}>

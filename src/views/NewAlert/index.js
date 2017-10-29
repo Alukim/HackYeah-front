@@ -49,7 +49,6 @@ export default class NewAlertView extends React.Component {
   };
 
   async componentDidMount() {
-    await AsyncStorage.setItem('userId', 'bed0d09a-bb98-495b-887f-0cbb767637a4');0
     let permissions = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ useCamera: permissions.status === 'granted' });
 
@@ -97,32 +96,28 @@ export default class NewAlertView extends React.Component {
       if(this.state.image)
       {
         let localUri = this.state.image.uri;
-        console.log(localUri);
         let filename = localUri.split('/').pop();
 
-        console.log(locaUri + ' ' + filename);
-        const formData = new FormData();
-
+        let formData = new FormData();
         formData.append('file', { 
-          uri: localUri, 
-          name: filename, 
+          uri: localUri,
+          name: 'file',
+          filename, 
           type: 'image/jpeg',
         });
-        console.log(formData);
 
         response = await axios({
           method: 'POST',
           baseURL: `${config.apiURL}/files`,
-          body: formData,
+          data: formData,
           headers: { 
             'Accept': 'application/json',
             'Content-Type': 'multipart/form-data',
-            'Content-Language': React.NativeModules.RNI18n.locale, 
           },
         });
         
-        console.log(response);
         attachmentId = response.data;
+        console.log(attachmentId);
       }
 
       response = await axios.post(`${config.apiURL}/alerts`, {
@@ -134,12 +129,15 @@ export default class NewAlertView extends React.Component {
         attachmentId,
       });
       if (response.status >= 300) {
+        console.log(response);
         this.setState({ message: response.message, showPopup: true });
       } else {
+        console.log('test');
         this.setState({ image: null });
         this.props.navigation.navigate('List');
       }
     } catch (error) {
+      console.log(error);
       this.setState({ message: error.message, showPopup: true });
     }
   }
@@ -166,7 +164,7 @@ export default class NewAlertView extends React.Component {
             >
               <Button
                 onPress={async () => {
-                  const image = await this.camera.takePictureAsync();
+                  const image = await this.camera.takePictureAsync({ quality: 0, exif: false });
                   this.setState({ image, showCamera: false });
                 }}
                 transparent

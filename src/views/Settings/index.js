@@ -13,11 +13,13 @@ export default class SettingsView extends React.Component {
   render() {
     return (
       <Container>
-        <Button title='Sing out' onPress={ async () => {
-          await AsyncStorage.removeItem('userId');
-          this.props.navigation.navigate('Login');
+        <Button
+          title="Sing out"
+          onPress={async () => {
+            await AsyncStorage.removeItem('userId');
+            this.props.navigation.navigate('Login');
           }} 
-          /> 
+        /> 
       </Container>
     );
   }

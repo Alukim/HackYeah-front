@@ -70,7 +70,7 @@ export default class Login extends React.Component {
         password,
       });
 
-      if (response.status === 200 || response.status === 201) {
+      if (response.status >= 200 && response.status < 300) {
         await AsyncStorage.setItem('userId', response.data);
         this.props.navigation.navigate('Main');
       }
