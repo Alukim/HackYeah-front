@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, KeyboardAvoidingView, StatusBar, View } from 'react-native';
+import { Image, KeyboardAvoidingView, StatusBar, View, AsyncStorage } from 'react-native';
 import { Icon, Label, Form, Input, Item, Text, Container, Button } from 'native-base';
 import Expo from 'expo';
 import axios from 'axios';
@@ -78,12 +78,9 @@ export default class Login extends React.Component {
         lastName: surname,
         email
       });
-
-      console.log(response)
   
       if (response.status === 200 || response.status === 201) {
-        await AsyncStorage.setItem('isAuthorized', true);
-        await AsyncStorage.setItem('userId', response.data);        
+        this.props.navigation.navigate('Login')       
       }
     } catch(error) {
       console.log(error.message);
