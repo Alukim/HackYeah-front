@@ -9,29 +9,6 @@ import config from '../../../config/index.js';
 
 const isIOS = Platform.OS === 'ios';
 
-const cardsData = [
-  {
-    id: '234235',
-    userName: 'Łukasz Jenczmyk',
-    localization: 'Tauron Arena, Kraków',
-    category: 'Homeless',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies dictum ipsum in pretium. Duis a sodales nibh, et egestas libero. Nullam aliquet augue sed neque fringilla tempus.',
-    imageURL: null,
-    confirmCount: 7,
-    date: '2017-10-27T19:34:00Z',
-  },
-  {
-    id: '98174289',
-    userName: 'Elon Musk',
-    localization: 'Hawthorne, USA',
-    category: 'Other',
-    description: 'Curabitur gravida erat eleifend ullamcorper blandit.',
-    imageURL: null,
-    confirmCount: 0,
-    date: '2017-10-26T19:34:00Z',
-  },
-];
-
 export default class ListView extends React.Component {
   static navigationOptions = {
     tabBarLabel: 'Alerts',
@@ -56,18 +33,27 @@ export default class ListView extends React.Component {
 
     if (response.status === 200) {
       this.setState({ alertsList: response.data });
-      console.log(response.data);
     } else {
       console.log(response.status);
     }
   }
   render() {
-    const showMessage = () => {
-      console.log('Confirm!');
+    const confirmAlert = (id) => {
+      return () => {
+        const x = this.state.alertsList.map((alert) => {
+          if (alert.confirmed) {
+            return alert;
+          }
+          return alert.id !== id
+            ? alert
+            : Object.assign({}, alert, { confirmed: true, confirmedBy: [...alert.confirmedBy, null] });
+        });
+        this.setState({ alertsList: x });
+      };
     };
     const { navigation } = this.props;
     const cards = this.state.alertsList.map(cardData => (
-      <AlertCard key={cardData.id} alertData={cardData} onConfirm={showMessage} />
+      <AlertCard key={cardData.id} alertData={cardData} onConfirm={confirmAlert(cardData.id)} />
     ));
     return (
       <Container style={{ paddingTop: isIOS ? 15 : 0, backgroundColor: '#eeeeef' }}>

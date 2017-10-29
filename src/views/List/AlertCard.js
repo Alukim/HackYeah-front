@@ -46,7 +46,7 @@ export default function AlertCard({ alertData, onConfirm }) {
           </Text>
           <Body>
             <Button iconLeft full transparent onPress={onConfirm}>
-              <Icon name="md-checkmark-circle" style={{ color: '#3de881' }} />
+              <Icon name="md-checkmark-circle" style={{ color: alertData.confirmed ? '#3de881' : '#494949' }} />
               <Text> {alertData.confirmedBy.length} people confirmed this alert</Text>
             </Button>
           </Body>
