@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, View, Platform } from 'react-native';
-import { Container, Content, Card, CardItem, Body, Icon } from 'native-base';
+import { Container, Content, Card, CardItem, Body, Icon, Fab } from 'native-base';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -38,6 +38,7 @@ export default class ListView extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
     const cards = cardsData.map(cardData => (
       <Card key={cardData.id} style={{ marginBottom: 30 }}>
         <CardItem
@@ -80,7 +81,16 @@ export default class ListView extends React.Component {
       </Card>
     ));
     return (
-      <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#eeeeef' }}>
+      <Container style={{ paddingTop: isIOS ? 15 : 0, backgroundColor: '#eeeeef' }}>
+        {!isIOS && (
+          <Fab
+            position="bottomRight"
+            onPress={() => navigation.navigate('NewAlert')}
+            style={{ backgroundColor: '#2196f3', zIndex: 9999999 }}
+          >
+            <Icon name="add" />
+          </Fab>
+        )}
         <Content style={{ padding: 15 }}>
           { cards }
         </Content>

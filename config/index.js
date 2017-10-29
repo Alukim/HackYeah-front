@@ -1,5 +1,5 @@
 export default {
-  apiURL: 'http://google.pl',
+  apiURL: 'http://hackyeah.northeurope.cloudapp.azure.com/api',
   alertColors: {
     pollution: '#009c00',
     homelessness: '#6f4900',
