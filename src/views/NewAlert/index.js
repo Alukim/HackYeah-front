@@ -3,10 +3,10 @@ import axios from 'axios';
 import {
   Icon, Container, Content, Button, Text,
   Card, Form, CardItem, Item, Picker, Input,
-  Label,
+  Label, Toast,
 } from 'native-base';
-import { Platform, View } from 'react-native';
-import { Permissions, MapView } from 'expo';
+import { Platform, View, AsyncStorage, TouchableOpacity } from 'react-native';
+import { Permissions, MapView, Camera, Location } from 'expo';
 
 import config from '../../../config';
 
@@ -25,35 +25,41 @@ export default class NewAlertView extends React.Component {
     this.selectCategory = this.selectCategory.bind(this);
     this.changeDescription = this.changeDescription.bind(this);
     this.changeLocation = this.changeLocation.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   state = {
     useLocation: true,
     useCamera: true,
     showCamera: false,
+    showCameraRoll: true,
     categories: [],
     selectedCategory: '',
     location: '',
     description: '',
+    image: null,
     region: {
       latitude: 50.0676592,
       longitude:  19.988532,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     },
+    showPopup: false,
+    message: '',
   };
 
   async componentDidMount() {
-    let status = await Permissions.askAsync(Permissions.CAMERA).status;
-    this.setState({ useCamera: status === 'granted' });
+    await AsyncStorage.setItem('userId', 'bed0d09a-bb98-495b-887f-0cbb767637a4');
+    let permissions = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ useCamera: permissions.status === 'granted' });
 
     const response = await axios.get(`${config.apiURL}/alerts/categories`);
     if (response.status === 200) {
       this.setState({ categories: response.data });
     }
 
-    status = await Permissions.askAsync(Permissions.LOCATION).status;
-    if (status !== 'granted') {
+    permissions = await Permissions.askAsync(Permissions.LOCATION);
+    if (permissions.status !== 'granted') {
       this.setState({ useLocation: false });
     } else {
       const { coords } = await Location.getCurrentPositionAsync({});
@@ -80,20 +86,78 @@ export default class NewAlertView extends React.Component {
     this.setState({ location: value });
   }
 
+  async handleSubmit() {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      const { selectedCategory, description, region } = this.state;
+      const response = await axios.post(`${config.apiURL}/alerts`, {
+        userId,
+        description,
+        category: selectedCategory,
+        latitude: region.latitude,
+        longitude: region.longitude,
+        attachmentId: null,
+      });
+      if (response.status >= 300) {
+        this.setState({ message: response.message, showPopup: true });
+      } else {
+        this.props.navigation.navigate('List');
+      }
+    } catch (error) {
+      this.setState({ message: error.message, showPopup: true });
+    }
+  }
+
   render() {
-    const { useLocation, useCamera, showCamera, categories, selectedCategory, description, region, location } = this.state;
+    const { useLocation, useCamera, showCamera, categories, selectedCategory, description, region, location, showPopup, message } = this.state;
+    if (useCamera && showCamera) {
+      return (
+        <Camera style={{ flex: 1 }} type={Camera.Constants.Type.back} ref={ref => { this.camera = ref; }} >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'transparent',
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                alignSelf: 'flex-end',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <Button
+                onPress={async () => {
+                  const image = await this.camera.takePictureAsync();
+                  this.setState({ image, showCamera: false });
+                  console.log(image);
+                }}
+                transparent
+                style={{ marginBottom: 25 }}
+              >
+                <Icon style={{ color: '#fff' }} name="camera" />
+              </Button>
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      );
+    }
+
     return (
       <Container style={{ paddingTop: iOS ? 15 : 0, backgroundColor: '#eeeeef' }}>
+        {showPopup && <Toast text={message} show position="bottom" />}
         <Content style={{ padding: 15 }}>
-          <Card>
+          <Card style={{ marginBottom: 15 }}>
             <CardItem>
-              <Form style={{ overflow: 'hidden', marginHorizontal: -20, flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
+              <Form style={{ overflow: 'hidden', marginHorizontal: -20, width: '100%', flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
                 <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', width: '100%' }}>
                   <Button
                     transparent
                     iconLeft
                     dark
-                    onClick={() => this.setState({ showCamera: true })}
+                    onPress={() => this.setState({ showCamera: true })}
                     style={{
                       height: 120,
                       width: 120,
@@ -111,7 +175,7 @@ export default class NewAlertView extends React.Component {
                     transparent
                     iconLeft
                     dark
-                    onClick={() => this.setState({ showCamera: true })}
+                    onPress={() => this.setState({ showCameraRoll: true })}
                     style={{
                       height: 120,
                       width: 120,
@@ -180,7 +244,7 @@ export default class NewAlertView extends React.Component {
                 </View>
                 <MapView
                   loadingBackgroundColor="#efefef"
-                  style={{ marginTop: 15, marginBottom: -15, flex: 1, height: 200, width: '100%' }}
+                  style={{ marginTop: 15, marginBottom: 15, flex: 1, height: 200, width: '100%' }}
                   loadingEnabled
                   showsPointsOfInterest
                   showsMyLocationButton
@@ -194,6 +258,11 @@ export default class NewAlertView extends React.Component {
                     longitudeDelta: 0.0421,
                   }}
                 />
+                <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
+                  <Button backgroundColor="#2196f3" onPress={this.handleSubmit}>
+                    <Icon name="send" /><Text>Send alert</Text>
+                  </Button>
+                </View>
               </Form>
             </CardItem>
           </Card>
