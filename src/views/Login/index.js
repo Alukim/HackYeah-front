@@ -1,17 +1,32 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { Component } from 'react';
+import { StatusBar, KeyboardAvoidingView } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-export default class LoginView extends React.Component {
-  constructor(props) {
-    super(props);
+import Login from './Login';
+import Register from './Register';
 
-    this.state = {
-    };
+export default class LoginView extends Component {
+  state = {
+    LoginRouter: null
+  };
+
+  componentWillMount() {
+    this.setState({
+      LoginRouter: StackNavigator({
+        Login: { screen: Login },
+        Register: { screen: Register },
+        Main: { screen: this.props.MainRouter }
+      }, {
+        initialRouteName: 'Login',
+        headerMode: 'hidden',
+      })
+    })
   }
 
   render() {
+    const { LoginRouter } = this.state;
     return (
-      <View><Text>Login view</Text></View>
+      <LoginRouter />
     );
   }
 }
