@@ -93,13 +93,41 @@ export default class NewAlertView extends React.Component {
 
       let response;
       let attachmentId;
-      if (this.state.image) {
-        response = await axios.post(`${config.apiURL}/files`, {
-          file: this.state.image,
+
+      if(this.state.image)
+      {
+        // ImagePicker saves the taken photo to disk and returns a local URI to it
+        let localUri = this.state.image.uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        // Upload the image using the fetch and FormData APIs
+        let formData = new FormData();
+        // Assume "photo" is the name of the form field the server expects
+        formData.append('photo', { uri: localUri, name: filename, type });
+        console.log(formData);
+        response = await fetch(`${config.apiURL}/files`, {
+          method: 'POST',
+          body: formData,
+          header: {
+            'content-type': 'multipart/form-data',
+          },
         });
+
+        console.log(response);
 
         attachmentId = response.data;
       }
+      // if (this.state.image) {
+      //   response = await axios.post(`${config.apiURL}/files`, {
+      //     file: this.state.image,
+      //   });
+
+      //   attachmentId = response.data;
+      // }
 
       response = await axios.post(`${config.apiURL}/alerts`, {
         userId,
