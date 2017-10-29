@@ -90,17 +90,29 @@ export default class NewAlertView extends React.Component {
     try {
       const userId = await AsyncStorage.getItem('userId');
       const { selectedCategory, description, region } = this.state;
-      const response = await axios.post(`${config.apiURL}/alerts`, {
+
+      let response;
+      let attachmentId;
+      if (this.state.image) {
+        response = await axios.post(`${config.apiURL}/files`, {
+          file: this.state.image,
+        });
+
+        attachmentId = response.data;
+      }
+
+      response = await axios.post(`${config.apiURL}/alerts`, {
         userId,
         description,
         category: selectedCategory,
         latitude: region.latitude,
         longitude: region.longitude,
-        attachmentId: null,
+        attachmentId,
       });
       if (response.status >= 300) {
         this.setState({ message: response.message, showPopup: true });
       } else {
+        this.setState({ image: null });
         this.props.navigation.navigate('List');
       }
     } catch (error) {
@@ -132,7 +144,6 @@ export default class NewAlertView extends React.Component {
                 onPress={async () => {
                   const image = await this.camera.takePictureAsync();
                   this.setState({ image, showCamera: false });
-                  console.log(image);
                 }}
                 transparent
                 style={{ marginBottom: 25 }}
