@@ -21,9 +21,8 @@ if (iOS) {
     NewAlert: { screen: NewAlertView },
     Notifications: { screen: NotificationsView },
     Settings: { screen: SettingsView },
-    Login: {screen: LoginView }
   }, {
-    initialRouteName: 'Login',
+    initialRouteName: 'List',
     animationEnabled: false,
     tabBarOptions: {
       showIcon: true,
@@ -37,9 +36,8 @@ if (iOS) {
     Map: { screen: MapView },
     Notifications: { screen: NotificationsView },
     Settings: { screen: SettingsView },
-    Login: { screen: LoginView }
   }, {
-    initialRouteName: 'Login',
+    initialRouteName: 'List',
     animationEnabled: true,
     tabBarOptions: {
       activeTintColor: '#2196f3',
@@ -64,8 +62,11 @@ if (iOS) {
 }
 
 export default class App extends React.Component {
-  state = { isAuthorized: true }
-
+  state = { isAuthorized: false }
+  async componentDidMount() {
+    const isAuthorized = await AsyncStorage.getItem('isAuthorized');
+    this.setState({ isAuthorized });
+  }
   render() {
     return (
       <Container>

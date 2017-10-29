@@ -1,56 +1,29 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { Icon, Label, Form, Input, Item, Text, Button } from 'native-base';
+import { StatusBar, KeyboardAvoidingView } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-import config from '../../../config';
+import Login from './Login';
+import Register from './Register';
 
-const styles = StyleSheet.create({
-  img: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: null,
-    height: null
-  },
-  icon: {
-    color: 'white'
-  },
-  input: {
-  },
-  inputLabel: {
-    opacity: 0.7
-  }
+const LoginRouter = StackNavigator({
+  Login: { screen: Login },
+  Register: { screen: Register },
+}, {
+  initialRouteName: 'Login',
+  headerMode: 'hidden',
 });
 
 export default class LoginView extends Component {
-  constructor(props) {
-    super(props);
+  state = {
 
-    this.state = {
-    };
-  }
+  };
 
   render() {
     return (
-      <Image style={styles.img} source={require('../../img/loginScreen.jpg')}>
-        <Text> Socialize </Text>
-        <KeyboardAvoidingView>
-          <Form>
-            <Item fixedLabel >
-              <Icon name='person' style={styles.icon} >
-                <Label style={styles.inputLabel} > Username </Label>
-              </Icon>
-              <Input />
-            </Item>
-            <Item fixedLabel>
-              <Icon name='lock' style={styles.icon} >
-                <Label block style={styles.inputLabel} > Password </Label>
-              </Icon>
-              <Input />
-            </Item>
-          </Form>
-        </KeyboardAvoidingView>
-      </Image>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
+        <StatusBar backgroundColor="transparent" barStyle="light-content" />
+        <LoginRouter />
+      </KeyboardAvoidingView>
     );
   }
 }
