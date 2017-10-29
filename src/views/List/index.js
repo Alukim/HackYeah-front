@@ -1,6 +1,8 @@
 import React from 'react';
-import { Image, Text, View, Platform } from 'react-native';
-import { Container, Content, Card, CardItem, Body, Icon } from 'native-base';
+import { Platform } from 'react-native';
+import { Container, Content, Icon } from 'native-base';
+import FilterBar from './FilterBar';
+import AlertCard from './AlertCard';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -13,6 +15,7 @@ const cardsData = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies dictum ipsum in pretium. Duis a sodales nibh, et egestas libero. Nullam aliquet augue sed neque fringilla tempus.',
     imageURL: null,
     confirmCount: 7,
+    date: '2017-10-27T19:34:00Z',
   },
   {
     id: '98174289',
@@ -22,12 +25,9 @@ const cardsData = [
     description: 'Curabitur gravida erat eleifend ullamcorper blandit.',
     imageURL: null,
     confirmCount: 0,
+    date: '2017-10-26T19:34:00Z',
   },
 ];
-const categoryColors = new Map([
-  ['Homeless', 'orange'],
-  ['Other', 'gray'],
-]);
 
 export default class ListView extends React.Component {
   static navigationOptions = {
@@ -39,53 +39,15 @@ export default class ListView extends React.Component {
 
   render() {
     const cards = cardsData.map(cardData => (
-      <Card key={cardData.id} style={{ marginBottom: 30 }}>
-        <CardItem
-          cardBody
-          style={[
-            {
-              borderRadius: 0, height: 4, padding: 0, margin: 0, overflow: 'hidden',
-            },
-            {
-              backgroundColor: categoryColors.get(cardData.category),
-            },
-          ]}
-        />
-        <CardItem>
-          <Body>
-            <Text>
-              { cardData.userName }
-            </Text>
-            <Text style={{ fontSize: 12 }}>
-              { cardData.localization }
-            </Text>
-          </Body>
-        </CardItem>
-        <CardItem cardBody>
-          <Image
-            source={{ uri: 'http://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/sample1_l.jpg' }}
-            style={{ height: 200, width: null, flex: 1 }}
-          />
-        </CardItem>
-        <CardItem cardBody>
-          <View style={{ padding: 10 }}>
-            <Text style={{ fontWeight: 'bold' }}>
-              { cardData.category }
-            </Text>
-            <Text>
-              { cardData.description }
-            </Text>
-          </View>
-        </CardItem>
-      </Card>
+      <AlertCard key={cardData.id} alertData={cardData} />
     ));
     return (
-      <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#eeeeef' }}>
+      <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#efefef' }}>
         <Content style={{ padding: 15 }}>
+          <FilterBar />
           { cards }
         </Content>
       </Container>
-
     );
   }
 }
