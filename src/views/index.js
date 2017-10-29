@@ -62,20 +62,11 @@ if (iOS) {
 }
 
 export default class App extends React.Component {
-  state = { isAuthorized: false }
-  async componentDidMount() {
-    //const isAuthorized = await AsyncStorage.getItem('isAuthorized');
-    //this.setState({ isAuthorized: false });
-  }
   render() {
     return (
       <Container>
         <StatusBar backgroundColor="#fff" />
-        {
-          this.state.isAuthorized
-          ? <AppRouter />
-          : <LoginView />
-        }
+        <LoginView MainRouter={AppRouter} />
       </Container>
     );
   }

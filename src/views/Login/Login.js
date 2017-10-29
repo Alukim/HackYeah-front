@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Image, KeyboardAvoidingView, StatusBar, View } from 'react-native';
+import { Image, KeyboardAvoidingView, StatusBar, View, AsyncStorage } from 'react-native';
 import { Icon, Label, Form, Input, Item, Text, Container, Button } from 'native-base';
 import Expo from 'expo';
+import axios from 'axios';
 import config from '../../../config';
 
 const styles = {
@@ -49,6 +50,11 @@ export default class Login extends React.Component {
     fontsLoaded: false,
   }
 
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
   async componentDidMount() {
     await Expo.Font.loadAsync({
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf')
@@ -63,10 +69,10 @@ export default class Login extends React.Component {
         nickName: username,
         password,
       });
-  
+
       if (response.status === 200 || response.status === 201) {
-        await AsyncStorage.setItem('isAuthorized', true);
-        await AsyncStorage.setItem('userId', response.data);        
+        await AsyncStorage.setItem('userId', response.data);
+        this.props.navigation.navigate('Main');
       }
     } catch(error) {
       console.log(error.message);
@@ -82,12 +88,13 @@ export default class Login extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <KeyboardAvoidingView style={{ flex: 1 }}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
         <Image style={styles.img} source={require('../../img/loginScreen.jpg')}>
           <Image style={styles.logo} resizeMode="contain" source={require('../../img/logo.png')} />
-          {this.state.fontsLoaded 
+          {this.state.fontsLoaded
             ? (
               <Form style={styles.form}>
                 <Item floatingLabel style={styles.item}>
@@ -100,19 +107,19 @@ export default class Login extends React.Component {
                   <Label style={styles.label}>Password</Label>
                   <Input secureTextEntry style={{ color: '#fff' }} onChangeText={this.changePassword.bind(this)} value={this.state.password} />
                 </Item>
-                <Button style={{ height: 40, marginBottom: 8 }} block backgroundColor="#2196f3" onPress={this.handleOnSubmit}>
+                <Button style={{ height: 40, marginBottom: 8 }} block backgroundColor="#2196f3" onPress={this.handleSubmit}>
                   <Text>Sign In</Text>
                 </Button>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Button iconLeft style={styles.button} onPress={this.handleOnSubmit} backgroundColor="#415dae">
+                  <Button iconLeft style={styles.button} onPress={this.handleSubmit} backgroundColor="#415dae">
                     <Icon name="logo-facebook" />
                     <Text>Facebook</Text>
                   </Button>
-                  <Button iconLeft style={styles.button} onPress={this.handleOnSubmit} backgroundColor="#e84c3d">
+                  <Button iconLeft style={styles.button} onPress={this.handleSubmit} backgroundColor="#e84c3d">
                     <Icon name="logo-googleplus" />
                     <Text>Google+</Text>
                   </Button>
-                </View> 
+                </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', marginTop: 20 }}>
                   <Text style={{ color: '#fff', flex: 1, width: '100%', textAlign: 'center' }}>
                     Don't have an account?
