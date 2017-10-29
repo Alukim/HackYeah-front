@@ -63,7 +63,6 @@ if (iOS) {
 }
 
 export default class App extends React.Component {
-  state = { isAuthorized: true }
 
   async componentWillMount() {
     await Expo.Font.loadAsync({
@@ -76,11 +75,7 @@ export default class App extends React.Component {
     return (
       <Container>
         <StatusBar backgroundColor="#fff" />
-        {
-          this.state.isAuthorized
-          ? <AppRouter />
-          : <LoginView />
-        }
+        <LoginView MainRouter={AppRouter} />
       </Container>
     );
   }

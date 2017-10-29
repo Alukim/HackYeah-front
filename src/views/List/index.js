@@ -1,33 +1,13 @@
 import React from 'react';
-import { Image, Text, View, Platform } from 'react-native';
+import { Location, Permissions } from 'expo';
+import axios from 'axios';
+import { Image, Text, View, Platform, AsyncStorage } from 'react-native';
 import { Container, Content, Card, CardItem, Body, Icon, Fab } from 'native-base';
 import FilterBar from './FilterBar';
 import AlertCard from './AlertCard';
+import config from '../../../config/index.js';
 
 const isIOS = Platform.OS === 'ios';
-
-const cardsData = [
-  {
-    id: '234235',
-    userName: 'Łukasz Jenczmyk',
-    localization: 'Tauron Arena, Kraków',
-    category: 'Homeless',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies dictum ipsum in pretium. Duis a sodales nibh, et egestas libero. Nullam aliquet augue sed neque fringilla tempus.',
-    imageURL: null,
-    confirmCount: 7,
-    date: '2017-10-27T19:34:00Z',
-  },
-  {
-    id: '98174289',
-    userName: 'Elon Musk',
-    localization: 'Hawthorne, USA',
-    category: 'Other',
-    description: 'Curabitur gravida erat eleifend ullamcorper blandit.',
-    imageURL: null,
-    confirmCount: 0,
-    date: '2017-10-26T19:34:00Z',
-  },
-];
 
 export default class ListView extends React.Component {
   static navigationOptions = {
@@ -36,11 +16,49 @@ export default class ListView extends React.Component {
       <Icon name="list" style={{ color: tintColor }} />
     ),
   };
+  constructor() {
+    super();
+    this.state = {
+      alertsList: [],
+    };
+    //this.loadData = this.loadData.bind(this);
+  }
+  async componentDidMount() {
+    const userId = await AsyncStorage.getItem('userId');
+    this.setState({userId: userId});
+    this.loadData(1);
+  }
+  async loadData(type) {
+    console.log('load data, type='+type);
+    const options = type === 0 ? ('?UserId='+this.state.userId) : '';
+    //this.setState({ alertsList: [] });
+    const response = await axios.get(`${config.apiURL}/alerts` + options);
 
+    if (response.status === 200) {
+      this.setState({ alertsList: response.data });
+    } else {
+      console.log('error');
+      console.log(response.status);
+    }
+  }
   render() {
+    const confirmAlert = (id) => {
+      return () => {
+        const newList = this.state.alertsList.map((alert) => {
+          if (alert.confirmed || alert.id !== id) {
+            return alert;
+          }
+          return Object.assign({}, alert, { confirmed: true, confirmedBy: [...alert.confirmedBy, this.state.userId] });
+        });
+        axios.patch(`${config.apiURL}/alerts/${id}/confirm`, { 'UserId': this.state.userId }).then(response => {
+          console.log('response')
+        });
+        this.setState({ alertsList: newList });
+      };
+    };
     const { navigation } = this.props;
-    const cards = cardsData.map(cardData => (
-      <AlertCard key={cardData.id} alertData={cardData} />
+    const cards = this.state.alertsList.map(cardData => (
+      <AlertCard key={cardData.id} alertData={cardData} onConfirm={confirmAlert(cardData.id)} />
     ));
     return (
       <Container style={{ paddingTop: isIOS ? 15 : 0, backgroundColor: '#eeeeef' }}>
@@ -54,7 +72,7 @@ export default class ListView extends React.Component {
           </Fab>
         )}
         <Content style={{ padding: 15 }}>
-          <FilterBar />
+          <FilterBar onChange={this.loadData} />
           { cards }
         </Content>
       </Container>
