@@ -36,10 +36,15 @@ export default class ListView extends React.Component {
       <Icon name="list" style={{ color: tintColor }} />
     ),
   };
+  componentDidMount() {
 
+  }
   render() {
+    const showMessage = () => {
+      console.log('Confirm!');
+    };
     const cards = cardsData.map(cardData => (
-      <AlertCard key={cardData.id} alertData={cardData} />
+      <AlertCard key={cardData.id} alertData={cardData} onConfirm={showMessage} />
     ));
     return (
       <Container style={{ paddingTop: isIOS ? 50 : 0, backgroundColor: '#efefef' }}>

@@ -2,15 +2,9 @@ import React from 'react';
 import { Text, View, Image } from 'react-native';
 import { Card, CardItem, Icon, Button, Body, Right } from 'native-base';
 import moment from 'moment';
+import config from '../../../config/index.js';
 
-const categoryColors = new Map([
-  ['Homeless', '#e84c3d'],
-  ['Other', '#2196f3'],
-  ['Other 2', '#009c00'],
-  ['Other 3', ' #ff8200'],
-]);
-
-export default function AlertCard({ alertData }) {
+export default function AlertCard({ alertData, onConfirm }) {
   return (
     <Card style={{ marginBottom: 15 }}>
       <CardItem
@@ -18,7 +12,7 @@ export default function AlertCard({ alertData }) {
         style={{
             borderRadius: 0,
             height: 4,
-            backgroundColor: categoryColors.get(alertData.category),
+            backgroundColor: config.alertColors[alertData.category.toLowerCase()],
           }}
       />
       <CardItem>
@@ -51,7 +45,7 @@ export default function AlertCard({ alertData }) {
             { alertData.description }
           </Text>
           <Body>
-            <Button iconLeft full transparent>
+            <Button iconLeft full transparent onPress={onConfirm}>
               <Icon name="md-checkmark-circle" style={{ color: '#3de881' }} />
               <Text> {alertData.confirmCount} people confirmed this alert</Text>
             </Button>
