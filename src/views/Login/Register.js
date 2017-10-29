@@ -21,13 +21,14 @@ const styles = {
   },
   item: {
     marginLeft: 0,
+    marginBottom: 10,
   },
   inputLabel: {
     opacity: 0.7,
   },
   form: {
     marginHorizontal: 50,
-    marginTop: 50,
+    marginTop: 15,
     flex: 1,
     height: '100%',
   },
@@ -36,17 +37,21 @@ const styles = {
     color: 'rgba(255,255,255,0.5)',
   },
   logo: {
-    marginTop: 100,
+    marginTop: 60,
     width: '100%',
-    height: 70,
+    height: 60,
   },
 };
 
 
 export default class Login extends React.Component {
   state = {
-    username: '',
+    nick: '',
+    name: '',
+    surname: '',
+    email: '',
     password: '',
+    rePassword: '',
     fontsLoaded: false,
   }
 
@@ -64,14 +69,14 @@ export default class Login extends React.Component {
 
   async handleSubmit() {
     try {
-      const { username, password } = this.state;
-      console.log(`${config.apiURL}/login`, {
-        nickName: username,
+      const { nick, name, surname, email, password, rePassword } = this.state;
+
+      const response = await axios.post(`${config.apiURL}/users`, {
+        nickName: nick,
         password,
-      })
-      const response = await axios.post(`${config.apiURL}/login`, {
-        nickName: username,
-        password,
+        firstName: name,
+        lastName: surname,
+        email
       });
 
       console.log(response)
@@ -85,12 +90,28 @@ export default class Login extends React.Component {
     }
   }
 
+  changeNick(value) {
+    this.setState({ nick: value })
+  }
+
+  changeName(value) {
+    this.setState({ name: value })
+  }
+
+  changeSurname(value) {
+    this.setState({ surname: value })
+  }
+
+  changeEmail(value) {
+    this.setState({ email: value })
+  }
+
   changePassword(value) {
     this.setState({ password: value })
   }
 
-  changeUsername(value) {
-    this.setState({ username: value })
+  changeRePassword(value) {
+    this.setState({ rePassword: value })
   }
 
   render() {
@@ -102,25 +123,34 @@ export default class Login extends React.Component {
           {this.state.fontsLoaded 
             ? (
               <Form style={styles.form}>
-                <Item floatingLabel style={styles.item}>
+                <Item style={styles.item}>
                   <Icon name="person" style={styles.icon} />
-                  <Label style={styles.label}>Username</Label>
-                  <Input style={{ color: '#fff' }} onChangeText={this.changeUsername.bind(this)} value={this.state.username} />
+                  <Input placeholder="Nick" style={{ color: '#fff' }} onChangeText={this.changeNick.bind(this)} value={this.state.nick} />
                 </Item>
-                <Item floatingLabel style={{ marginLeft: 0, marginBottom: 50 }}>
-                  <Icon name="lock" style={styles.icon} />
-                  <Label style={styles.label}>First name</Label>
-                  <Input secureTextEntry style={{ color: '#fff' }} onChangeText={this.changePassword.bind(this)} value={this.state.password} />
+                <Item style={styles.item}>
+                  <Icon name="person" style={styles.icon} />
+                  <Input placeholder="Name" style={{ color: '#fff' }} onChangeText={this.changeName.bind(this)} value={this.state.name} />
                 </Item>
-                <Item floatingLabel style={{ marginLeft: 0, marginBottom: 50 }}>
+                <Item style={styles.item}>
+                  <Icon name="person" style={styles.icon} />
+                  <Input placeholder="Surname" style={{ color: '#fff' }} onChangeText={this.changeSurname.bind(this)} value={this.state.surname} />
+                </Item>
+                <Item style={styles.item}>
+                  <Icon name="mail" style={styles.icon} />
+                  <Input placeholder="Email" style={{ color: '#fff' }} onChangeText={this.changeEmail.bind(this)} value={this.state.email} />
+                </Item>
+                <Item style={styles.item}>
                   <Icon name="lock" style={styles.icon} />
-                  <Label style={styles.label}>Last name</Label>
-                  <Input secureTextEntry style={{ color: '#fff' }} onChangeText={this.changePassword.bind(this)} value={this.state.password} />
+                  <Input placeholder="Password" secureTextEntry style={{ color: '#fff' }} onChangeText={this.changePassword.bind(this)} value={this.state.password} />
+                </Item>
+                <Item style={styles.item}>
+                  <Icon name="lock" style={styles.icon} />
+                  <Input placeholder="RePassword" secureTextEntry style={{ color: '#fff' }} onChangeText={this.changeRePassword.bind(this)} value={this.state.rePassword} />
                 </Item>
                 <Button style={{ height: 40, marginBottom: 8 }} block backgroundColor="#2196f3" onPress={this.handleSubmit}>
                   <Text>Sign In</Text>
                 </Button>                
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', marginTop: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', marginTop: 10 }}>
                   <Text style={{ color: '#fff', flex: 1, width: '100%', textAlign: 'center' }}>
                     Already have an account?
                   </Text>
