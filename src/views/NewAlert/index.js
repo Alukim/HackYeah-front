@@ -98,24 +98,27 @@ export default class NewAlertView extends React.Component {
       {
         // ImagePicker saves the taken photo to disk and returns a local URI to it
         let localUri = this.state.image.uri;
+        console.log(localUri);
         let filename = localUri.split('/').pop();
 
-        // Infer the type of the image
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
-
+        console.log(locaUri + ' ' + filename);
         // Upload the image using the fetch and FormData APIs
         let formData = new FormData();
         // Assume "photo" is the name of the form field the server expects
-        formData.append('photo', { uri: localUri, name: filename, type });
+        formData.append('file', { uri: localUri, name: filename, type: 'image/jpeg' });
         console.log(formData);
-        response = await fetch(`${config.apiURL}/files`, {
+
+        const config = {
           method: 'POST',
-          body: formData,
-          header: {
-            'content-type': 'multipart/form-data',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data',
+            'Content-Language': React.NativeModules.RNI18n.locale,
           },
-        });
+          body: formData,
+        }
+
+        response = await fetch(`${config.apiURL}/files`, config);
 
         console.log(response);
 
