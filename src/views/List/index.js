@@ -1,9 +1,11 @@
 import React from 'react';
 import { Location, Permissions } from 'expo';
+import axios from 'axios';
 import { Image, Text, View, Platform } from 'react-native';
 import { Container, Content, Card, CardItem, Body, Icon, Fab } from 'native-base';
 import FilterBar from './FilterBar';
 import AlertCard from './AlertCard';
+import config from '../../../config/index.js';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -37,11 +39,26 @@ export default class ListView extends React.Component {
       <Icon name="list" style={{ color: tintColor }} />
     ),
   };
-  state = {};
+  state = {
+    alertsList: []
+  };
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status === 'granted') {
-      const { coords } = await Location.getCurrentPositionAsync({});
+      /*
+      await Location.getCurrentPositionAsync({}).then(coords => {
+
+      });
+      */
+    }
+
+    const response = await axios.get(`${config.apiURL}/alerts`);
+
+    if (response.status === 200) {
+      this.setState({ alertsList: response.data });
+      console.log(response.data);
+    } else {
+      console.log(response.status);
     }
   }
   render() {
@@ -49,7 +66,7 @@ export default class ListView extends React.Component {
       console.log('Confirm!');
     };
     const { navigation } = this.props;
-    const cards = cardsData.map(cardData => (
+    const cards = this.state.alertsList.map(cardData => (
       <AlertCard key={cardData.id} alertData={cardData} onConfirm={showMessage} />
     ));
     return (

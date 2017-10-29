@@ -19,14 +19,14 @@ export default function AlertCard({ alertData, onConfirm }) {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Body>
             <Text>
-              { alertData.userName }
+              { alertData.userNickName }
             </Text>
             <Text style={{ fontSize: 12 }}>
-              { alertData.localization }
+              { 'Tauron Arena, Kraków' }
             </Text>
           </Body>
           <Right>
-            <Text note style={{ textAlign: 'right' }}>{ moment(alertData.date).fromNow() }</Text>
+            <Text note style={{ textAlign: 'right' }}>{ moment(alertData.createdAt).fromNow() }</Text>
           </Right>
         </View>
       </CardItem>
@@ -47,7 +47,7 @@ export default function AlertCard({ alertData, onConfirm }) {
           <Body>
             <Button iconLeft full transparent onPress={onConfirm}>
               <Icon name="md-checkmark-circle" style={{ color: '#3de881' }} />
-              <Text> {alertData.confirmCount} people confirmed this alert</Text>
+              <Text> {alertData.confirmedBy.length} people confirmed this alert</Text>
             </Button>
           </Body>
         </View>
